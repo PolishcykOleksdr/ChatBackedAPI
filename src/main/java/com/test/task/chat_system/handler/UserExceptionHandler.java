@@ -1,6 +1,8 @@
 package com.test.task.chat_system.handler;
 
+import com.test.task.chat_system.exception.chatException.ChatNotFoundException;
 import com.test.task.chat_system.exception.userException.UserNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,6 +23,16 @@ public class UserExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> userNotFoundException(Exception e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ChatNotFoundException.class)
+    public ResponseEntity<String> chatNotFoundException(Exception e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> dataIntegrityViolationException(){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("User or chat with this name already exists");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

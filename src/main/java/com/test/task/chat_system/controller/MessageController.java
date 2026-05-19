@@ -2,6 +2,7 @@ package com.test.task.chat_system.controller;
 
 import com.test.task.chat_system.dto.requestDto.messageRequestDto.CreateMessageRequestDto;
 import com.test.task.chat_system.dto.requestDto.messageRequestDto.GetChatMessagesRequestDto;
+import com.test.task.chat_system.dto.responseDto.MessageResponseDto;
 import com.test.task.chat_system.service.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * author: user,
@@ -33,7 +36,7 @@ public class MessageController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<?> getChatMessages(
+    public ResponseEntity<List<MessageResponseDto>> getChatMessages(
             @Valid @RequestBody GetChatMessagesRequestDto getChatMessagesRequestDto
     ) {
         return ResponseEntity

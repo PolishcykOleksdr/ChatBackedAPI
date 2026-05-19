@@ -1,6 +1,7 @@
 package com.test.task.chat_system.dto.requestDto.messageRequestDto;
 
 import com.test.task.chat_system.annotation.ValidId;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 public record GetChatMessagesRequestDto(
         @NotNull
         @ValidId
+        @JsonProperty("chat")
         Long chatId
 ) {
 }

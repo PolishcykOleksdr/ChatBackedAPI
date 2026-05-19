@@ -7,7 +7,9 @@ import com.test.task.chat_system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * author: user,
@@ -33,6 +35,13 @@ public class UserService {
     }
 
     public List<User> getUsersByIds(List<Long> ids){
-        return userRepository.findAllById(ids);
+        List<User> users = userRepository.findAllById(ids);
+        Set<Long> uniqueIds = new HashSet<>(ids);
+
+        if (users.size() != uniqueIds.size()) {
+            throw new UserNotFoundException("One or more users were not found");
+        }
+
+        return users;
     }
 }

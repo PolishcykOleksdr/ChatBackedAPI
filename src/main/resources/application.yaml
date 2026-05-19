@@ -2,11 +2,12 @@ spring:
   application:
     name: Chat_System
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: rootroot
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:rootroot}
     driver-class-name: org.postgresql.Driver
   jpa:
+    open-in-view: false
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -15,8 +16,4 @@ spring:
         format_sql: true
 
 server:
-  port: 9000
-
-app:
-  params:
-    chat-name-min-length: 3
+  port: ${SERVER_PORT:9000}

@@ -2,7 +2,9 @@ package com.test.task.chat_system.service;
 
 import com.test.task.chat_system.dto.requestDto.messageRequestDto.CreateMessageRequestDto;
 import com.test.task.chat_system.dto.requestDto.messageRequestDto.GetChatMessagesRequestDto;
+import com.test.task.chat_system.dto.responseDto.MessageResponseDto;
 import com.test.task.chat_system.entity.Message;
+import com.test.task.chat_system.mapper.MessageMapper;
 import com.test.task.chat_system.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ChatService chatService;
     private final UserService userService;
+    private final MessageMapper messageMapper;
 
     public Long createMessage(CreateMessageRequestDto createMessageRequestDto){
         Message message = new Message();
@@ -30,9 +33,9 @@ public class MessageService {
         return messageRepository.save(message).getId();
     }
 
-    public List<Message> getChatMessages(GetChatMessagesRequestDto getChatMessagesRequestDto) {
-        return messageRepository.findAllByChat_IdOrderByCreatedAtAsc(
+    public List<MessageResponseDto> getChatMessages(GetChatMessagesRequestDto getChatMessagesRequestDto) {
+        return messageMapper.toDtoList(messageRepository.findAllByChat_IdOrderByCreatedAtAsc(
                 getChatMessagesRequestDto.chatId()
-        );
+        ));
     }
 }

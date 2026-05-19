@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = MaxLengthValidator.class)
 public @interface MaxLength {
     int max() default 3;
-    String message() default "Length of the text should be more than {max}";
+    String message() default "Length of the text should be less than {max}";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

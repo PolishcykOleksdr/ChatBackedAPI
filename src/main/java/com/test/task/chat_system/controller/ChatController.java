@@ -2,7 +2,7 @@ package com.test.task.chat_system.controller;
 
 import com.test.task.chat_system.dto.requestDto.chatRequestDto.CreateChatRequestDto;
 import com.test.task.chat_system.dto.requestDto.chatRequestDto.GetUserChatsRequestDto;
-import com.test.task.chat_system.entity.Chat;
+import com.test.task.chat_system.dto.responseDto.ChatResponseDto;
 import com.test.task.chat_system.service.ChatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chats")
 @RequiredArgsConstructor
 public class ChatController {
     private final ChatService chatService;
@@ -31,7 +31,7 @@ public class ChatController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<List<Chat>> getUserChats(
+    public ResponseEntity<List<ChatResponseDto>> getUserChats(
             @Valid @RequestBody GetUserChatsRequestDto getUserChatsRequestDto
     ) {
         return ResponseEntity

@@ -19,6 +19,6 @@ public class MaxLengthValidator implements ConstraintValidator<MaxLength, String
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value.length() > maxLength;
+        return value.length() < maxLength;
     }
 }

@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = MinLengthValidator.class)
 public @interface MinLength {
     int min() default 3;
-    String message() default "Length of the text should be less than {min}";
+    String message() default "Length of the text should be more than {min}";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
