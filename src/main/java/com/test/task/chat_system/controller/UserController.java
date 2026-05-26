@@ -3,13 +3,10 @@ package com.test.task.chat_system.controller;
 import com.test.task.chat_system.dto.requestDto.userRequestDto.CreateUserRequestDto;
 import com.test.task.chat_system.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author: user,
@@ -23,9 +20,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addUser(
-            @Valid @RequestBody CreateUserRequestDto createUserRequestDto
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Long addUser(
+            @NotNull  @Valid @RequestBody CreateUserRequestDto createUserRequestDto
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(createUserRequestDto));
+        return userService.addUser(createUserRequestDto);
     }
 }

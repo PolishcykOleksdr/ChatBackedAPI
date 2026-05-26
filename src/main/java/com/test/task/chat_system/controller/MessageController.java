@@ -5,13 +5,10 @@ import com.test.task.chat_system.dto.requestDto.messageRequestDto.GetChatMessage
 import com.test.task.chat_system.dto.responseDto.MessageResponseDto;
 import com.test.task.chat_system.service.MessageService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,20 +24,18 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addMessage(
-            @Valid @RequestBody CreateMessageRequestDto createMessageRequestDto
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Long addMessage(
+            @NotNull  @Valid @RequestBody CreateMessageRequestDto createMessageRequestDto
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(messageService.createMessage(createMessageRequestDto));
+        return messageService.createMessage(createMessageRequestDto);
     }
 
     @PostMapping("/get")
-    public ResponseEntity<List<MessageResponseDto>> getChatMessages(
-            @Valid @RequestBody GetChatMessagesRequestDto getChatMessagesRequestDto
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<MessageResponseDto> getChatMessages(
+            @NotNull @Valid @RequestBody GetChatMessagesRequestDto getChatMessagesRequestDto
     ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(messageService.getChatMessages(getChatMessagesRequestDto));
+        return messageService.getChatMessages(getChatMessagesRequestDto);
     }
 }

@@ -5,9 +5,9 @@ import com.test.task.chat_system.dto.requestDto.chatRequestDto.GetUserChatsReque
 import com.test.task.chat_system.dto.responseDto.ChatResponseDto;
 import com.test.task.chat_system.service.ChatService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +24,18 @@ public class ChatController {
     private final ChatService chatService;
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addChat(
-            @Valid @RequestBody CreateChatRequestDto chatRequestDto
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Long addChat(
+            @NotNull @Valid @RequestBody CreateChatRequestDto chatRequestDto
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(chatService.createChat(chatRequestDto));
+        return chatService.createChat(chatRequestDto);
     }
 
     @PostMapping("/get")
-    public ResponseEntity<List<ChatResponseDto>> getUserChats(
-            @Valid @RequestBody GetUserChatsRequestDto getUserChatsRequestDto
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<ChatResponseDto> getUserChats(
+            @NotNull @Valid @RequestBody GetUserChatsRequestDto getUserChatsRequestDto
     ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(chatService.getChatsByUserId(getUserChatsRequestDto));
+        return chatService.getChatsByUserId(getUserChatsRequestDto);
     }
 }

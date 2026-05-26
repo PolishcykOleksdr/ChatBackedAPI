@@ -9,6 +9,7 @@ import com.test.task.chat_system.exception.chatException.ChatNotFoundException;
 import com.test.task.chat_system.mapper.ChatMapper;
 import com.test.task.chat_system.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService {
     private final ChatRepository chatRepository;
     private final UserService userService;
@@ -33,7 +35,9 @@ public class ChatService {
         List<User> users = userService.getUsersByIds(createChatRequestDto.userIds());
         chat.setUsers(users);
 
-        return chatRepository.save(chat).getId();
+        Long chatId = chatRepository.save(chat).getId();
+        log.info("Created chat with id {} and name {}", chatId, createChatRequestDto.name());
+        return chatId;
     }
 
     public Chat getChatById(Long id){
@@ -43,6 +47,10 @@ public class ChatService {
     }
 
     public List<ChatResponseDto> getChatsByUserId(GetUserChatsRequestDto getUserChatsRequestDto){
-        return chatMapper.toDtoList(chatRepository.findAllByUserOrderByLastMessage(getUserChatsRequestDto.userId()));
+        List<ChatResponseDto> chats = chatMapper.toDtoList(
+                chatRepository.findAllByUserOrderByLastMessage(getUserChatsRequestDto.userId())
+        );
+        log.info("Found {} chats for user id {}", chats.size(), getUserChatsRequestDto.userId());
+        return chats;
     }
 }

@@ -5,6 +5,7 @@ import com.test.task.chat_system.entity.User;
 import com.test.task.chat_system.exception.userException.UserNotFoundException;
 import com.test.task.chat_system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -25,7 +27,9 @@ public class UserService {
         User user = new User();
         user.setUserName(createUserRequestDto.userName());
 
-        return userRepository.save(user).getId();
+        Long userId = userRepository.save(user).getId();
+        log.info("Created user with id {} and username {}", userId, createUserRequestDto.userName());
+        return userId;
     }
 
     public User getUserById(Long id){
@@ -35,13 +39,11 @@ public class UserService {
     }
 
     public List<User> getUsersByIds(List<Long> ids){
-        List<User> users = userRepository.findAllById(ids);
         Set<Long> uniqueIds = new HashSet<>(ids);
 
-        if (users.size() != uniqueIds.size()) {
-            throw new UserNotFoundException("One or more users were not found");
-        }
+        List<User> users = userRepository.findAllById(uniqueIds);
 
+        log.info("Found {} users by their ids", users.size());
         return users;
     }
 }

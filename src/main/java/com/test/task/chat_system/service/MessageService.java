@@ -7,6 +7,7 @@ import com.test.task.chat_system.entity.Message;
 import com.test.task.chat_system.mapper.MessageMapper;
 import com.test.task.chat_system.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MessageService {
     private final MessageRepository messageRepository;
     private final ChatService chatService;
@@ -30,12 +32,21 @@ public class MessageService {
         message.setAuthor(userService.getUserById(createMessageRequestDto.userId()));
         message.setText(createMessageRequestDto.text());
 
-        return messageRepository.save(message).getId();
+        Long messageId = messageRepository.save(message).getId();
+        log.info(
+                "Created message with id {} in chat id {} by user id {}",
+                messageId,
+                createMessageRequestDto.chatId(),
+                createMessageRequestDto.userId()
+        );
+        return messageId;
     }
 
     public List<MessageResponseDto> getChatMessages(GetChatMessagesRequestDto getChatMessagesRequestDto) {
-        return messageMapper.toDtoList(messageRepository.findAllByChat_IdOrderByCreatedAtAsc(
-                getChatMessagesRequestDto.chatId()
-        ));
+        List<MessageResponseDto> messages = messageMapper.toDtoList(
+                messageRepository.findAllByChat_IdOrderByCreatedAtAsc(getChatMessagesRequestDto.chatId())
+        );
+        log.info("Found {} messages for chat id {}", messages.size(), getChatMessagesRequestDto.chatId());
+        return messages;
     }
 }
