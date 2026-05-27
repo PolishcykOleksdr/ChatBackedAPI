@@ -33,6 +33,14 @@ public class ChatService {
         Chat chat = new Chat();
         chat.setName(createChatRequestDto.name());
         List<User> users = userService.getUsersByIds(createChatRequestDto.userIds());
+        if (users.size() != createChatRequestDto.userIds().size()) {
+            log.warn(
+                    "Requested {} users for chat {}, but found {}",
+                    createChatRequestDto.userIds().size(),
+                    createChatRequestDto.name(),
+                    users.size()
+            );
+        }
         chat.setUsers(users);
 
         Long chatId = chatRepository.save(chat).getId();
@@ -41,11 +49,13 @@ public class ChatService {
     }
 
     public Chat getChatById(Long id){
-        return chatRepository.findById(id).orElseThrow(() ->
-                new ChatNotFoundException(String.format("Chat with id %d not found", id))
-        );
+        return chatRepository.findById(id).orElseThrow(() -> {
+            log.warn("Chat with id {} not found", id);
+            return new ChatNotFoundException(String.format("Chat with id %d not found", id));
+        });
     }
 
+    @Transactional(readOnly = true)
     public List<ChatResponseDto> getChatsByUserId(GetUserChatsRequestDto getUserChatsRequestDto){
         List<ChatResponseDto> chats = chatMapper.toDtoList(
                 chatRepository.findAllByUserOrderByLastMessage(getUserChatsRequestDto.userId())

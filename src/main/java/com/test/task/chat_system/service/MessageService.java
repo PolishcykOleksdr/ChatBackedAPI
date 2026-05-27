@@ -27,6 +27,11 @@ public class MessageService {
     private final MessageMapper messageMapper;
 
     public Long createMessage(CreateMessageRequestDto createMessageRequestDto){
+        log.info(
+                "Creating message in chat id {} by user id {}",
+                createMessageRequestDto.chatId(),
+                createMessageRequestDto.userId()
+        );
         Message message = new Message();
         message.setChat(chatService.getChatById(createMessageRequestDto.chatId()));
         message.setAuthor(userService.getUserById(createMessageRequestDto.userId()));

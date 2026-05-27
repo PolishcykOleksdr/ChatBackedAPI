@@ -7,6 +7,7 @@ import com.test.task.chat_system.service.MessageService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/messages")
 @RequiredArgsConstructor
+@Slf4j
 public class MessageController {
     private final MessageService messageService;
 
@@ -28,6 +30,11 @@ public class MessageController {
     public Long addMessage(
             @NotNull  @Valid @RequestBody CreateMessageRequestDto createMessageRequestDto
     ) {
+        log.info(
+                "Received request to create message in chat id {} by user id {}",
+                createMessageRequestDto.chatId(),
+                createMessageRequestDto.userId()
+        );
         return messageService.createMessage(createMessageRequestDto);
     }
 
@@ -36,6 +43,7 @@ public class MessageController {
     public List<MessageResponseDto> getChatMessages(
             @NotNull @Valid @RequestBody GetChatMessagesRequestDto getChatMessagesRequestDto
     ) {
+        log.info("Received request to get messages for chat id {}", getChatMessagesRequestDto.chatId());
         return messageService.getChatMessages(getChatMessagesRequestDto);
     }
 }

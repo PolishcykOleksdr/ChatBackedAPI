@@ -33,15 +33,19 @@ public class UserService {
     }
 
     public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException(String.format("User with id %d not found", id))
-        );
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.warn("User with id {} not found", id);
+            return new UserNotFoundException(String.format("User with id %d not found", id));
+        });
     }
 
     public List<User> getUsersByIds(List<Long> ids){
         Set<Long> uniqueIds = new HashSet<>(ids);
 
         List<User> users = userRepository.findAllById(uniqueIds);
+        if (users.size() != uniqueIds.size()) {
+            log.warn("Requested {} unique users, but found {}", uniqueIds.size(), users.size());
+        }
 
         log.info("Found {} users by their ids", users.size());
         return users;

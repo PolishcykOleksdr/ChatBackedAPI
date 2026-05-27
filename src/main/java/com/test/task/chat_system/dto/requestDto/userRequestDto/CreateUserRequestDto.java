@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateUserRequestDto(
         @NotNull
-        @MinLength(min = 4)
+        @MinLength(min = 2)
         @MaxLength(max = 15)
         @JsonProperty("username")
         String userName

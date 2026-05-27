@@ -7,6 +7,7 @@ import com.test.task.chat_system.service.ChatService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/chats")
 @RequiredArgsConstructor
+@Slf4j
 public class ChatController {
     private final ChatService chatService;
 
@@ -28,6 +30,11 @@ public class ChatController {
     public Long addChat(
             @NotNull @Valid @RequestBody CreateChatRequestDto chatRequestDto
     ) {
+        log.info(
+                "Received request to create chat with name {} and {} users",
+                chatRequestDto.name(),
+                chatRequestDto.userIds().size()
+        );
         return chatService.createChat(chatRequestDto);
     }
 
@@ -36,6 +43,7 @@ public class ChatController {
     public List<ChatResponseDto> getUserChats(
             @NotNull @Valid @RequestBody GetUserChatsRequestDto getUserChatsRequestDto
     ) {
+        log.info("Received request to get chats for user id {}", getUserChatsRequestDto.userId());
         return chatService.getChatsByUserId(getUserChatsRequestDto);
     }
 }

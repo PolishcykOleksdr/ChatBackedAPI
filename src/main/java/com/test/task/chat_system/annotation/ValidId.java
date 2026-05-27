@@ -1,6 +1,7 @@
 package com.test.task.chat_system.annotation;
 
 import com.test.task.chat_system.validator.MinLengthValidator;
+import com.test.task.chat_system.validator.ValidIdValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -16,7 +17,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = MinLengthValidator.class)
+@Constraint(validatedBy = ValidIdValidator.class)
 public @interface ValidId {
     String message() default "Id should be more or equal 1";
 
